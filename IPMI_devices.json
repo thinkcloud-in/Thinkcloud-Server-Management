@@ -1,0 +1,11 @@
+
+[
+   {
+    "id": 1,
+    "name": "X710 board -1.08.0 - default firmware",
+    "ipmi_server_ip": "10.1.3.103",
+    "username": "admin",
+    "password": "Teamw0rk@1"
+  }
+
+]

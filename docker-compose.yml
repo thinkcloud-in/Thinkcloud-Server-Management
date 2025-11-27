@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  app:
+    image: server_management_file:1.0.0 
+    container_name: server_management_file
+    ports:
+      - "8005:8005"
+    environment:
+      INFLUX_URL: 172.16.0.103:8086
+      INFLUX_TOKEN: IZnnRh1HaT_yDNZdFKvY0O0h_2666lgRsOXqi-S-RlIeQ-dM4I9yYGliunyOJV08Kt4xzlx0WcFrzqc2F7IZlw==
+      ORG: RCV-Vamanit-ORG
+      BUCKET: redfish-bucket
+      IPMI_DEVICES_FILE: IPMI_devices.json
+    volumes:
+      - ./IPMI_devices.json:/app/IPMI_devices.json
+
+    restart: unless-stopped
+
+
