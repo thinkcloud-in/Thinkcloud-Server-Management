@@ -153,7 +153,3 @@ async def set_uid_action(
         return {"status": "success", "action": uid_action, "indicator_value": indicator_value}
     else:
         raise HTTPException(status_code=patch_resp.status_code, detail=f"Redfish UID action failed: {patch_resp.text}")
-
-
-
-
