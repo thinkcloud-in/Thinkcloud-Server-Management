@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server_management
+  name: server-management
   namespace: thinkcloud
   labels:
-    app: server_management
+    app: server-management
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: server_management
+      app: server-management
   template:
     metadata:
       labels:
-        app: server_management
+        app: server-management
     spec:
       containers:
-        - name: server_management
-          image: server_management:latest
+        - name: server-management
+          image: server-management:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8008

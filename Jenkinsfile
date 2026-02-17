@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME       = "server_management"
+        APP_NAME       = "server-management"
         IMAGE_TAG      = "latest"
 
         WORKDIR        = "/home/admin-01/Desktop/rcv/server-management"
         TAR_DIR        = "/home/admin-01/Desktop/rcv/tar"
-        TAR_FILE       = "server_management_latest.tar"
+        TAR_FILE       = "server-management.tar"
 
         REMOTE_HOST    = "172.16.0.101"
         REMOTE_USER    = "root"
