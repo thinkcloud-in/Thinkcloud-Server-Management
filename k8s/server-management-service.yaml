@@ -8,6 +8,7 @@ spec:
     app: server-management
   ports:
     - protocol: TCP
-      port: 80
+      port: 8008
       targetPort: 8008
-  type: ClusterIP
+      nodePort: 30080
+  type: NodePort
