@@ -1,4 +1,4 @@
-*pipeline {
+pipeline {
     agent any
 
     environment {
@@ -63,6 +63,11 @@
                     scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
                         ${TAR_DIR}/${TAR_FILE} \
                         ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_TAR_DIR}/
+                    
+                    # Copy Kubernetes YAML files (from repo) to BASE_DIR
+                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
+                        ${WORKDIR}/k8s/*.yaml \
+                        ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_BASE_DIR}/
                 '''
             }
         }
