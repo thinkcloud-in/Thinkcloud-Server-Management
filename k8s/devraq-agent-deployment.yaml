@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server_management
+  namespace: thinkcloud
+  labels:
+    app: server_management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server_management
+  template:
+    metadata:
+      labels:
+        app: server_management
+    spec:
+      containers:
+        - name: server_management
+          image: server_management:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8008
+          env:
+            - name: INFLUXDB_URL
+              value: "https://influxdb.rcvdev.team"
+            - name: INFLUXDB_TOKEN
+              value: "9c00d5b8def8d01d15034e9ad5157f306b8dd8e9056a020cb74ba47538a23f2e"
+            - name: INFLUXDB_ORG
+              value: "RCV-Vamanit-ORG"
+            - name: REDFISH_BUCKET_NAME
+              value: "redfish-bucket"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "Password"
+            - name: DB_HOST
+              value: "172.16.0.103"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "thinkclouddb"
