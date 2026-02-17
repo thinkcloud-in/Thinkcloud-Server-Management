@@ -5,14 +5,14 @@ pipeline {
         APP_NAME       = "server_management"
         IMAGE_TAG      = "latest"
 
-        TAR_DIR        = "${WORKSPACE}/tar"
+        WORKDIR        = "/home/admin-01/Desktop/rcv/server-management"
+        TAR_DIR        = "/home/admin-01/Desktop/rcv/tar"
         TAR_FILE       = "server_management_latest.tar"
 
         REMOTE_HOST    = "172.16.0.101"
         REMOTE_USER    = "root"
         REMOTE_TAR_DIR = "/home/rcv/daas_installer/daas_tar"
-        REMOTE_BASE_DIR = "/home/rcv/daas_installer"
-        SSH_KEY        = "/root/.ssh/id_ed25519"
+        SSH_KEY        = "/root/.ssh/id_ed25519" // mounted inside Jenkins container
     }
 
     stages {
@@ -25,59 +25,61 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                deleteDir()
-                git branch: 'dynamic-data',
-                    url: 'https://github.com/thinkcloud-in/Thinkcloud-Server-Management.git',
-                    credentialsId: 'github_token'
+                dir("${WORKDIR}") {
+                    deleteDir()
+                    git branch: 'dynamic-data',
+                        url: 'https://github.com/thinkcloud-in/Thinkcloud-Server-Management.git',
+                        credentialsId: 'github_token'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker image prune -a -f
-                docker build -t ${APP_NAME}:${IMAGE_TAG} .
-                '''
+                dir("${WORKDIR}") {
+                    sh '''docker image prune -a -f
+                    docker build -t ${APP_NAME}:${IMAGE_TAG} .'''
+                }
             }
         }
 
         stage('Save Docker Image as TAR') {
             steps {
                 sh '''
-                docker save -o ${TAR_DIR}/${TAR_FILE} ${APP_NAME}:${IMAGE_TAG}
-                ls -lh ${TAR_DIR}
+                    docker save -o ${TAR_DIR}/${TAR_FILE} ${APP_NAME}:${IMAGE_TAG}
+                    ls -lh ${TAR_DIR}
                 '''
             }
         }
 
-        stage('Copy TAR + YAML to Remote Server') {
+        stage('Copy TAR to Remote Server') {
             steps {
                 sh '''
-                # Create remote directories
-                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no \
-                    ${REMOTE_USER}@${REMOTE_HOST} "mkdir -p ${REMOTE_TAR_DIR} ${REMOTE_BASE_DIR}"
+                    # Create remote directory
+                    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no \
+                        ${REMOTE_USER}@${REMOTE_HOST} "mkdir -p ${REMOTE_TAR_DIR}"
 
-                # Copy TAR
-                scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
-                    ${TAR_DIR}/${TAR_FILE} \
-                    ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_TAR_DIR}/
-
-                # Copy Kubernetes YAML
-                scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
-                    k8s/*.yaml \
-                    ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_BASE_DIR}/
+                    # Copy TAR file
+                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
+                        ${TAR_DIR}/${TAR_FILE} \
+                        ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_TAR_DIR}/
+                    
+                    # Copy Kubernetes YAML files (from repo) to BASE_DIR
+                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
+                        ${WORKDIR}/k8s/*.yaml \
+                        ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_BASE_DIR}/
                 '''
             }
         }
 
         stage('Deploy on Remote Server') {
             steps {
-                sh '''
-                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
-                    docker load -i /home/rcv/daas_installer/daas_tar/server_management_latest.tar
-                    kubectl apply -f /home/rcv/daas_installer/
-                EOF
-                '''
+                sh """
+                echo "➡️ Running server-management deployment script on remote server..."
+                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} bash -s <<ENDSSH
+                    /home/rcv/Desktop/scrpit/server-management.sh
+ENDSSH
+                """
             }
         }
     }
