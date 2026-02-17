@@ -10,10 +10,10 @@ services:
     env_file:
       - .env
     environment:
-      INFLUX_URL: ${INFLUX_URL}
-      INFLUX_TOKEN: ${INFLUX_TOKEN}
-      ORG: ${ORG}
-      BUCKET: ${BUCKET}
+      INFLUXDB_URL: ${INFLUXDB_URL}
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      REDFISH_BUCKET_NAME: ${REDFISH_BUCKET_NAME}
       IPMI_DEVICES_FILE: ${IPMI_DEVICES_FILE}
     volumes:
       - ./IPMI_devices.json:/app/IPMI_devices.json
