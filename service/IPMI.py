@@ -35,7 +35,7 @@ INFLUXDB_URL = os.getenv('INFLUXDB_URL')
 INFLUXDB_TOKEN = os.getenv('INFLUXDB_TOKEN')
 ORG = os.getenv('INFLUXDB_ORG')
 BUCKET = os.getenv('REDFISH_BUCKET_NAME')
-INFLUXDB_URL = f"https://{INFLUXDB_URL}/api/v2/write"
+INFLUXDB_URL = f"{INFLUXDB_URL}/api/v2/write"
 
 INFLUX_HEADERS = {
     "Authorization": f"Token {INFLUXDB_TOKEN}",

@@ -23,7 +23,7 @@ spec:
             - containerPort: 8008
           env:
             - name: INFLUXDB_URL
-              value: "influxdb.rcvdev.team"
+              value: "https://influxdb.rcvdev.team"
             - name: INFLUXDB_TOKEN
               value: "9c00d5b8def8d01d15034e9ad5157f306b8dd8e9056a020cb74ba47538a23f2e"
             - name: INFLUXDB_ORG
