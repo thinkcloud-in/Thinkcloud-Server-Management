@@ -10,5 +10,5 @@ spec:
     - protocol: TCP
       port: 8008
       targetPort: 8008
-      nodePort: 30080
+      nodePort: 30083
   type: NodePort
