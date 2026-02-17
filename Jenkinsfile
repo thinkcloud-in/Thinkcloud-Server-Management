@@ -72,32 +72,14 @@ pipeline {
             }
         }
 
-//         stage('Deploy on Remote Server') {
-//             steps {
-//                 sh """
-//                 echo "➡️ Running server-management deployment script on remote server..."
-//                 ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} bash -s <<ENDSSH
-//                     /home/rcv/Desktop/scrpit/server-management.sh
-// ENDSSH
-//                 """
-//             }
-//         }
         stage('Deploy on Remote Server') {
             steps {
-                sh '''
-                echo "🚀 Deploying on remote server..."
-
-                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
-
-                    echo "📦 Loading Docker image..."
-                    docker load -i /home/rcv/daas_installer/daas_tar/server_management_latest.tar
-
-                    echo "☸️ Applying Kubernetes manifests..."
-                    kubectl apply -f /home/rcv/daas_installer/
-
-                    echo "✅ Deployment done!"
-                EOF
-                '''
+                sh """
+                echo "➡️ Running server-management deployment script on remote server..."
+                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} bash -s <<ENDSSH
+                    /home/rcv/Desktop/scrpit/server-management.sh
+ENDSSH
+                """
             }
         }
     }
