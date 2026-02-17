@@ -12,6 +12,8 @@ pipeline {
         REMOTE_HOST    = "172.16.0.101"
         REMOTE_USER    = "root"
         REMOTE_TAR_DIR = "/home/rcv/daas_installer/daas_tar"
+        REMOTE_BASE_DIR = "/home/rcv/daas_installer/daas_v1/server-management"
+        SCRIPT_DIR     = "/home/rcv/Desktop/scrpit"
         SSH_KEY        = "/root/.ssh/id_ed25519" // mounted inside Jenkins container
     }
 
