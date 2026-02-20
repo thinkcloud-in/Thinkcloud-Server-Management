@@ -31,12 +31,12 @@ spec:
             - name: REDFISH_BUCKET_NAME
               value: "redfish-bucket"
             - name: DB_USER
-              value: "postgres"
+              value: admin
             - name: DB_PASSWORD
-              value: "Password"
+              value: test123
             - name: DB_HOST
-              value: "172.16.0.103"
+              value: postgres
             - name: DB_PORT
               value: "5432"
             - name: DB_NAME
-              value: "thinkclouddb"
+              value: postgres
