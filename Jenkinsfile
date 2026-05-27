@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME       = "server-management"
+        APP_NAME       = "devraq-server-management"
         IMAGE_TAG      = "1.0.0"
 
         WORKDIR        = "/home/admin-01/Desktop/rcv/server-management"
         TAR_DIR        = "/home/admin-01/Desktop/rcv/tar"
-        TAR_FILE       = "server-management${IMAGE_TAG}.tar"
+        TAR_FILE       = "devraq-server-management_${IMAGE_TAG}.tar"
 
         REMOTE_HOST    = "172.16.0.101"
         REMOTE_USER    = "root"
