@@ -3,9 +3,9 @@ version: "3.8"
 services:
   app:
     build: .
-    image: docker.io/library/server-management:1.0.0
+    image: docker.io/library/devraq-server-management:1.0.0
     imagePullPolicy: IfNotPresent
-    container_name: server-management
+    container_name: devraq-server-management
     ports:
       - "8008:8008"
     env_file:
