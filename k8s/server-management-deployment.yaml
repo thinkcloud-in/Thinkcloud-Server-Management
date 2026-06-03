@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-management
+  name: devraq-server-management
   namespace: thinkcloud
   labels:
-    app: server-management
+    app: devraq-server-management
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: server-management
+      app: devraq-server-management
   template:
     metadata:
       labels:
-        app: server-management
+        app: devraq-server-management
     spec:
       containers:
-        - name: server-management
-          image: server-management:latest
+        - name: devraq-server-management
+          image: docker.io/library/devraq-server-management:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8008
