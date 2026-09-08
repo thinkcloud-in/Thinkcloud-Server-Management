@@ -31,14 +31,14 @@ SESSION.mount("http://", ADAPTER)
 DEFAULT_TIMEOUT = 10  # seconds
 
 # --- Influx Details (still from env) ---
-INFLUX_URL = os.getenv('INFLUX_URL')
-INFLUX_TOKEN = os.getenv('INFLUX_TOKEN')
-ORG = os.getenv('ORG')
-BUCKET = os.getenv('BUCKET')
-INFLUX_URL = f"http://{INFLUX_URL}/api/v2/write"
+INFLUXDB_URL = os.getenv('INFLUXDB_URL')
+INFLUXDB_TOKEN = os.getenv('INFLUXDB_TOKEN')
+ORG = os.getenv('INFLUXDB_ORG')
+BUCKET = os.getenv('REDFISH_BUCKET_NAME')
+INFLUXDB_URL = f"{INFLUXDB_URL}/api/v2/write"
 
 INFLUX_HEADERS = {
-    "Authorization": f"Token {INFLUX_TOKEN}",
+    "Authorization": f"Token {INFLUXDB_TOKEN}",
     "Content-Type": "text/plain; charset=utf-8"
 }
 INFLUX_PARAMS = {
@@ -77,9 +77,6 @@ def get_first_system_url(redfish_root, user, password):
     if system_url.startswith("/"):
         system_url = scheme_host + system_url
     return system_url
-
-
-
 
 def fetch_collection(base_url, collection_pointer, user, password):
     members = []
@@ -441,7 +438,7 @@ def collect_and_push_device_data(device):
             # Write to InfluxDB (use SESSION with a timeout)
             data = "\n".join(lines)
             try:
-                resp = SESSION.post(INFLUX_URL, params=INFLUX_PARAMS, headers=INFLUX_HEADERS, data=data, timeout=DEFAULT_TIMEOUT)
+                resp = SESSION.post(INFLUXDB_URL, params=INFLUX_PARAMS, headers=INFLUX_HEADERS, data=data, timeout=DEFAULT_TIMEOUT, verify=False)
                 if resp.status_code == 204:
                     logging.info(f"All data written to InfluxDB successfully for {IPMI_SERVER}.")
                 else:
@@ -545,7 +542,7 @@ def main():
             # Write to InfluxDB (use SESSION with a timeout)
             data = "\n".join(lines)
             try:
-                resp = SESSION.post(INFLUX_URL, params=INFLUX_PARAMS, headers=INFLUX_HEADERS, data=data, timeout=DEFAULT_TIMEOUT)
+                resp = SESSION.post(INFLUXDB_URL, params=INFLUX_PARAMS, headers=INFLUX_HEADERS, data=data, timeout=DEFAULT_TIMEOUT, verify=False)
                 if resp.status_code == 204:
                     logging.info("All data written to InfluxDB successfully.")
                 else:
@@ -555,13 +552,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-

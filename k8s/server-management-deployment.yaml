@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devraq-server-management
+  namespace: thinkcloud
+  labels:
+    app: devraq-server-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devraq-server-management
+  template:
+    metadata:
+      labels:
+        app: devraq-server-management
+    spec:
+      containers:
+        - name: devraq-server-management
+          image: docker.io/library/devraq-server-management:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8008
+          env:
+            - name: INFLUXDB_URL
+              value: "http://172.16.0.101:30086"
+            - name: INFLUXDB_TOKEN
+              value: "9c00d5b8def8d01d15034e9ad5157f306b8dd8e9056a020cb74ba47538a23f2e"
+            - name: INFLUXDB_ORG
+              value: "RCV-Vamanit-ORG"
+            - name: REDFISH_BUCKET_NAME
+              value: "redfish-bucket"
+            - name: DB_USER
+              value: admin
+            - name: DB_PASSWORD
+              value: test123
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: thinkclouddb
